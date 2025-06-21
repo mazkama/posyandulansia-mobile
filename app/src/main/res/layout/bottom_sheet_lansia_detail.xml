@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tvNama"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nama"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvNik"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NIK"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvTtl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tempat/Tanggal Lahir"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvAlamat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Alamat"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvKesehatan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Memuat data kesehatan..."
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:textColor="@android:color/black"
+        android:gravity="start" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvKesehatan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"
+        android:padding="8dp"/>
+
+
+
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tutup"
+        android:backgroundTint="@color/black"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>

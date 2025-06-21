@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F8F8">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/buttonBack"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="#F44336"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="50dp"
+            android:text="Cek Kesehatan"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonBack"
+            app:layout_constraintTop_toTopOf="@+id/buttonBack" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvCekKesehatan"
+            android:layout_width="315dp"
+            android:layout_height="0dp"
+            android:layout_margin="10dp"
+            app:cardBackgroundColor="#E74C3C"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="5dp"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintStart_toStartOf="@+id/view"
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            tools:ignore="MissingConstraints">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/txtItemNamaLansia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ahmad Mubarok"
+                    android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="8dp"
+                    android:background="#FFFFFF" />
+
+                <TextView
+                    android:id="@+id/txtItemNIKLansia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="8217643768224"
+                    android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Berat Badan (kg)"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintStart_toStartOf="@+id/view"
+            app:layout_constraintTop_toBottomOf="@+id/cvCekKesehatan" />
+
+        <EditText
+            android:id="@+id/edBeratBadan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:hint="Masukan Berat Badan"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="@+id/textView6"
+            app:layout_constraintStart_toStartOf="@+id/textView6"
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+        <TextView
+            android:id="@+id/tvMaxBerat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Berat badan ideal berkisar antara 53 kg – 72 kg"
+            android:textColor="#F44336"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/edBeratBadan"
+            app:layout_constraintStart_toStartOf="@+id/edBeratBadan"
+            app:layout_constraintTop_toBottomOf="@+id/edBeratBadan" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Tekanan Darah"
+            app:layout_constraintEnd_toEndOf="@+id/tvMaxBerat"
+            app:layout_constraintStart_toStartOf="@+id/tvMaxBerat"
+            app:layout_constraintTop_toBottomOf="@+id/tvMaxBerat" />
+
+        <EditText
+            android:id="@+id/edTekananDarahSistolik"
+            android:layout_width="0dp"
+            android:layout_height="41dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:ems="10"
+            android:hint="Masukan Sistolik"
+            android:inputType="number"
+            app:layout_constraintEnd_toStartOf="@+id/textView10"
+            app:layout_constraintStart_toStartOf="@+id/textView7"
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/edTekananDarahSistolik"
+            app:layout_constraintEnd_toStartOf="@+id/edTekananDarahDiastolik"
+            app:layout_constraintStart_toEndOf="@+id/edTekananDarahSistolik"
+            app:layout_constraintTop_toTopOf="@+id/edTekananDarahSistolik" />
+
+        <EditText
+            android:id="@+id/edTekananDarahDiastolik"
+            android:layout_width="0dp"
+            android:layout_height="39dp"
+            android:layout_marginStart="10dp"
+            android:ems="10"
+            android:hint="Diastolik"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="@+id/textView7"
+            app:layout_constraintStart_toEndOf="@+id/textView10"
+            app:layout_constraintTop_toTopOf="@+id/edTekananDarahSistolik" />
+
+        <TextView
+            android:id="@+id/tvMaxTekanan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Tekanan darah normal 90–120 / 60–80"
+            android:textColor="#F44336"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/textView7"
+            app:layout_constraintStart_toStartOf="@+id/textView7"
+            app:layout_constraintTop_toBottomOf="@+id/edTekananDarahDiastolik" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Gula Darah"
+            app:layout_constraintEnd_toEndOf="@+id/tvMaxTekanan"
+            app:layout_constraintStart_toStartOf="@+id/tvMaxTekanan"
+            app:layout_constraintTop_toBottomOf="@+id/tvMaxTekanan" />
+
+        <EditText
+            android:id="@+id/edGulaDarah"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:hint="Masukan Gula Darah"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="@+id/textView8"
+            app:layout_constraintStart_toStartOf="@+id/textView8"
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+        <TextView
+            android:id="@+id/tvMaxGula"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Gula darah normal kurang dari \n140mg/dL (2 Jam setelah makan)\n70–100 mg/dL (Puasa)"
+            android:textColor="#F44336"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/edGulaDarah"
+            app:layout_constraintStart_toStartOf="@+id/edGulaDarah"
+            app:layout_constraintEnd_toEndOf="@+id/edGulaDarah"
+            android:layout_marginTop="2dp"/>
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Kolestrol"
+            app:layout_constraintEnd_toEndOf="@+id/tvMaxGula"
+            app:layout_constraintStart_toStartOf="@+id/tvMaxGula"
+            app:layout_constraintTop_toBottomOf="@+id/tvMaxGula" />
+
+        <EditText
+            android:id="@+id/edKolestrol"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:hint="Masukan Kolestrol"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="@+id/textView9"
+            app:layout_constraintStart_toStartOf="@+id/textView9"
+            app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+        <TextView
+            android:id="@+id/tvMaxKolesterol"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Kolestrol normal kurang dari 200 mg/dL"
+            android:textColor="#F44336"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/edKolestrol"
+            app:layout_constraintStart_toStartOf="@+id/edKolestrol"
+            app:layout_constraintEnd_toEndOf="@+id/edKolestrol"
+            android:layout_marginTop="2dp"/>
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Asam Urat"
+            app:layout_constraintEnd_toEndOf="@+id/tvMaxKolesterol"
+            app:layout_constraintStart_toStartOf="@+id/tvMaxKolesterol"
+            app:layout_constraintTop_toBottomOf="@+id/tvMaxKolesterol" />
+
+        <EditText
+            android:id="@+id/edAsamUrat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:hint="Masukan Asam Urat"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="@+id/textView13"
+            app:layout_constraintStart_toStartOf="@+id/textView13"
+            app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+        <TextView
+            android:id="@+id/tvMaxAsamUrat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Asam murat normal kurang dari 7 mg/dL"
+            android:textColor="#F44336"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/edAsamUrat"
+            app:layout_constraintStart_toStartOf="@+id/edAsamUrat"
+            app:layout_constraintEnd_toEndOf="@+id/edAsamUrat"
+            android:layout_marginTop="2dp"/>
+
+        <Button
+            android:id="@+id/btnSimpanCekKesehatan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="Simpan"
+            app:layout_constraintEnd_toEndOf="@+id/tvMaxAsamUrat"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tvMaxAsamUrat"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar2" />
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/edAsamUrat"
+            app:layout_constraintStart_toStartOf="@+id/edAsamUrat"
+            app:layout_constraintTop_toBottomOf="@+id/edAsamUrat"
+            android:visibility="gone"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

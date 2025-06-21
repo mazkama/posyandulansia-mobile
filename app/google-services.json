@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "1080589821438",
+    "firebase_url": "https://posyandulansia-f9b02-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "posyandulansia-f9b02",
+    "storage_bucket": "posyandulansia-f9b02.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1080589821438:android:577bee4812e924a05c0caf",
+        "android_client_info": {
+          "package_name": "com.maulana.azka.ujicoba"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQjxbfyaYdrb-doFHwuaYFcslEieIk8dc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1080589821438:android:728e8eb19dd091fe5c0caf",
+        "android_client_info": {
+          "package_name": "com.saputra.wahyuaditya.posyandulansia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQjxbfyaYdrb-doFHwuaYFcslEieIk8dc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

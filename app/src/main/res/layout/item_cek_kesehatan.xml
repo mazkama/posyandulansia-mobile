@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tvTanggal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tanggal: "
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tvBeratBadan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Berat Badan: "
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/tvTekananDarah"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tekanan Darah: "
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/tvGulaDarah"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gula Darah: "
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/tvKolesterol"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Kolesterol: "
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/tvAsamUrat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Asam Urat: "
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/tvDiagnosa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Diagnosa: "
+        android:textStyle="italic"
+        android:textSize="14sp"/>
+</LinearLayout>

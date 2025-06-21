@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PosyanduLansia"
+        tools:targetApi="31">
+        <!-- SplashActivity dijalankan pertama kali -->
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/SplashTheme"
+            android:launchMode="singleTask"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- MainActivity sebagai aktivitas utama -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!-- LoginActivity -->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!-- AntrianPeriksaActivity -->
+        <activity
+            android:name=".AntrianPeriksaActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!-- CekKesehatanActivity -->
+        <activity
+            android:name=".CekKesehatanActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!-- DataLansiaActivity -->
+        <activity
+            android:name=".DataLansiaActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!-- DataJadwalActivity -->
+        <activity
+            android:name=".DataJadwalActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!-- RiwayatLansiaActivity -->
+        <activity
+            android:name=".RiwayatLansiaActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!-- DetailBeritaActivity -->
+        <activity
+            android:name=".DetailBeritaActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!-- ActivityParameterKesehatan -->
+        <activity
+            android:name=".ActivityParameterKesehatan"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
+    </application>
+
+</manifest>
