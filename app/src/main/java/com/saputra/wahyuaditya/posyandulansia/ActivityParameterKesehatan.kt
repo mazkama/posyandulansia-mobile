@@ -62,6 +62,15 @@ class ActivityParameterKesehatan : AppCompatActivity() {
             "asam_urat" -> "Asam Urat"
             else -> parameter.replace("_", " ").replaceFirstChar { it.uppercase() }
         }
+        val labelBatasNormal = when (parameter) {
+            "tekanan_darah" -> "Batas Normal \nTinggi: 90-120 mmHg \nRendah: 60-80 mmHg"
+            "gula_darah"    -> "Batas Normal \nTinggi: 100 mg/dL \nRendah: 70 mg/dL"
+            "kolesterol"    -> "Batas Normal \nTinggi: 200 mg/dL \nRendah: 120 mg/dL"
+            "asam_urat"     -> "Batas Normal \nTinggi: 7 mg/dL \nRendah: 2 mg/dL"
+            else -> parameter.replace("_", " ").replaceFirstChar { it.uppercase() }
+        }
+
+        b.batasnormal.text = labelBatasNormal
 
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val years = (2019..currentYear).map { it.toString() }.reversed() // contoh: 2025, 2024, ...

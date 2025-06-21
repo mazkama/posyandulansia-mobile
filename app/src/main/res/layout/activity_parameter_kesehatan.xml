@@ -37,51 +37,69 @@
                 android:text="Gula Darah"
                 android:textSize="24sp"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
         <!-- Filter Tahun -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/tilTahun"
-            android:layout_width="110dp"
-            android:layout_height="60dp"
-            android:layout_gravity="right"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="#FDFDFD"
-            android:clickable="true"
-            android:focusable="true"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+            <TextView
+                android:id="@+id/batasnormal"
+                android:layout_width="137dp"
+                android:layout_height="55dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:text="Batas Normal \nAtas: .... \nBawah:...."
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-                <Spinner
-                    android:id="@+id/spinnerYear"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:spinnerMode="dropdown"
-                    android:background="@android:color/transparent"
-                    android:textAlignment="viewStart"
-                    android:paddingStart="0dp"
-                    android:paddingEnd="0dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tilTahun"
+                android:layout_width="110dp"
+                android:layout_height="60dp"
+                android:layout_gravity="right"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#FDFDFD"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp">
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/calender_icon"
-                    android:tint="@color/black" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <Spinner
+                        android:id="@+id/spinnerYear"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="0dp"
+                        android:spinnerMode="dropdown"
+                        android:textAlignment="viewStart"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/calender_icon"
+                        android:tint="@color/black" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
 
         <!-- Chart Line -->
         <com.github.mikephil.charting.charts.BarChart
@@ -142,10 +160,10 @@
                     android:id="@+id/tvSolusiTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Solusi:"
-                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp"
+                    android:text="Saran:"
                     android:textSize="16sp"
-                    android:layout_marginBottom="4dp" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvSolusi"
