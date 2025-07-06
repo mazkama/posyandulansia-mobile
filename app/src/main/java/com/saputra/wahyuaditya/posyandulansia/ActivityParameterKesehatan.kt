@@ -25,8 +25,8 @@ import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ActivityParameterKesehatan : AppCompatActivity() {
 
@@ -34,7 +34,6 @@ class ActivityParameterKesehatan : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private val client = OkHttpClient()
     private lateinit var dialog: Dialog
-
     private lateinit var chart: BarChart
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +50,7 @@ class ActivityParameterKesehatan : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE)
         chart = b.barChart
         setupChart()
-        // Ambil idUser dari SharedPreferences, defaultnya 0 kalau tidak ada
+
         val userId = sharedPreferences.getString("idUser", "0")?.toInt() ?: 0
         val parameter = intent.getStringExtra("parameter") ?: "tekanan_darah"
 
@@ -62,18 +61,20 @@ class ActivityParameterKesehatan : AppCompatActivity() {
             "asam_urat" -> "Asam Urat"
             else -> parameter.replace("_", " ").replaceFirstChar { it.uppercase() }
         }
+
         val labelBatasNormal = when (parameter) {
             "tekanan_darah" -> "Batas Normal \nTinggi: 90-120 mmHg \nRendah: 60-80 mmHg"
             "gula_darah"    -> "Batas Normal \nTinggi: 100 mg/dL \nRendah: 70 mg/dL"
             "kolesterol"    -> "Batas Normal \nTinggi: 200 mg/dL \nRendah: 120 mg/dL"
             "asam_urat"     -> "Batas Normal \nTinggi: 7 mg/dL \nRendah: 2 mg/dL"
-            else -> parameter.replace("_", " ").replaceFirstChar { it.uppercase() }
+            else -> ""
         }
 
         b.batasnormal.text = labelBatasNormal
+        b.tvParameter.text = labelParameter
 
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val years = (2019..currentYear).map { it.toString() }.reversed() // contoh: 2025, 2024, ...
+        val years = (2019..currentYear).map { it.toString() }.reversed()
 
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, years)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -88,15 +89,10 @@ class ActivityParameterKesehatan : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
-        b.tvParameter.text = labelParameter
+        b.btnBack.setOnClickListener { finish() }
 
-        b.btnBack.setOnClickListener {
-            finish()
-        }
-
-        val defaultYear = years.first()
         b.spinnerYear.setSelection(0)
-        fetchData(userId, parameter, defaultYear)
+        fetchData(userId, parameter, years.first())
     }
 
     private fun setupChart() {
@@ -107,9 +103,28 @@ class ActivityParameterKesehatan : AppCompatActivity() {
         chart.xAxis.granularity = 1f
         chart.axisRight.isEnabled = false
         chart.setPinchZoom(true)
-
-        // Membuat label tanggal miring
         chart.xAxis.labelRotationAngle = -45f
+    }
+
+    private fun getKategoriNilai(parameter: String, nilai: Float): String {
+        return when (parameter) {
+            "gula_darah" -> when {
+                nilai < 70 -> "rendah"
+                nilai > 100 -> "tinggi"
+                else -> "normal"
+            }
+            "kolesterol" -> when {
+                nilai < 120 -> "rendah"
+                nilai > 200 -> "tinggi"
+                else -> "normal"
+            }
+            "asam_urat" -> when {
+                nilai < 2 -> "rendah"
+                nilai > 7 -> "tinggi"
+                else -> "normal"
+            }
+            else -> "normal"
+        }
     }
 
     private fun fetchData(idUser: Int, parameter: String, year: String) {
@@ -127,81 +142,66 @@ class ActivityParameterKesehatan : AppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
                 dialog.dismiss()
                 val responseBody = response.body?.string()
-                if (!response.isSuccessful || responseBody == null) {
-                    Log.e("HTTP", "Failed response or null")
-                    return
-                }
+                if (!response.isSuccessful || responseBody == null) return
 
                 val json = JSONObject(responseBody)
                 val dataArray = json.getJSONArray("data")
 
-                if (dataArray.length() > 0) {
-                    val latestObj = dataArray.getJSONObject(dataArray.length() - 1) // Ambil data terakhir
-
-                    val tanggal = latestObj.getString("tanggal")
-                    val kesimpulanArray = latestObj.getJSONArray("kesimpulan")
-                    val solusiArray = latestObj.getJSONArray("solusi")
-
-                    // Format tanggal (misalnya: Jumat, 23 Mei 2025)
-                    val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    val outputFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale("id", "ID"))
-                    val formattedDate = try {
-                        val date = inputFormat.parse(tanggal)
-                        outputFormat.format(date!!)
-                    } catch (e: Exception) {
-                        tanggal
-                    }
-
-                    // Gabungkan kesimpulan dan solusi jadi bullet points
-                    val kesimpulanText = StringBuilder()
-                    for (i in 0 until kesimpulanArray.length()) {
-                        kesimpulanText.append("• ").append(kesimpulanArray.getString(i)).append("\n")
-                    }
-
-                    val solusiText = StringBuilder()
-                    for (i in 0 until solusiArray.length()) {
-                        solusiText.append("• ").append(solusiArray.getString(i)).append("\n")
-                    }
-
-                    // Update UI di thread utama
+                if (dataArray.length() == 0) {
                     Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(this@ActivityParameterKesehatan, "Tidak ada riwayat pemeriksaan untuk tahun $year", Toast.LENGTH_SHORT).show()
+                        b.tvJadwal.text = "Jadwal Pemeriksaan"
+                        b.tvKesimpulan.text = "-"
+                        b.tvSolusi.text = "-"
+                        chart.clear()
+                        chart.invalidate()
+                    }
+                    return
+                }
 
-                        b.tvJadwal.text = "Jadwal Pemeriksaan\n$formattedDate"
-                        b.tvKesimpulan.text = kesimpulanText.toString().trim()
-                        b.tvSolusi.text = solusiText.toString().trim()
-                    }
-                    }else{
-                        // Jika data kosong, kosongkan teks dan chart
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(this@ActivityParameterKesehatan, "Tidak ada riwayat pemeriksaan untuk tahun $year", Toast.LENGTH_SHORT).show()
-                            b.tvJadwal.text = "Jadwal Pemeriksaan"
-                            b.tvKesimpulan.text = "-"
-                            b.tvSolusi.text = "-"
-                            chart.clear()
-                            chart.invalidate()
-                        }
-                        return
-                    }
+                val latestObj = dataArray.getJSONObject(dataArray.length() - 1)
+                val tanggal = latestObj.getString("tanggal")
+                val kesimpulanArray = latestObj.getJSONArray("kesimpulan")
+                val solusiArray = latestObj.getJSONArray("solusi")
+
+                val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val outputFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale("id", "ID"))
+                val formattedDate = try {
+                    outputFormat.format(inputFormat.parse(tanggal)!!)
+                } catch (e: Exception) {
+                    tanggal
+                }
+
+                val kesimpulanText = StringBuilder()
+                for (i in 0 until kesimpulanArray.length()) {
+                    kesimpulanText.append("• ").append(kesimpulanArray.getString(i)).append("\n")
+                }
+
+                val solusiText = StringBuilder()
+                for (i in 0 until solusiArray.length()) {
+                    solusiText.append("• ").append(solusiArray.getString(i)).append("\n")
+                }
+
+                Handler(Looper.getMainLooper()).post {
+                    b.tvJadwal.text = "Jadwal Pemeriksaan\n$formattedDate"
+                    b.tvKesimpulan.text = kesimpulanText.toString().trim()
+                    b.tvSolusi.text = solusiText.toString().trim()
+                }
 
                 val entries1 = ArrayList<BarEntry>()
                 val entries2 = ArrayList<BarEntry>()
+                val colors1 = ArrayList<Int>()
+                val colors2 = ArrayList<Int>()
                 val tanggalList = ArrayList<String>()
 
-                val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                val outputFormat = SimpleDateFormat(
-                    "MMMM",
-                    Locale("id", "ID")
-                ) // untuk nama bulan dalam Bahasa Indonesia
+                val outputMonth = SimpleDateFormat("MMMM", Locale("id", "ID"))
 
                 for (i in 0 until dataArray.length()) {
                     val obj = dataArray.getJSONObject(i)
                     val tanggalString = obj.getString("tanggal")
                     val nilaiString = obj.optString(parameter, "")
-
-                    // Konversi tanggal ke nama bulan
-                    val bulan: String = try {
-                        val date = inputFormat.parse(tanggalString)
-                        outputFormat.format(date!!)
+                    val bulan = try {
+                        outputMonth.format(inputFormat.parse(tanggalString)!!)
                     } catch (e: Exception) {
                         "Unknown"
                     }
@@ -213,12 +213,25 @@ class ActivityParameterKesehatan : AppCompatActivity() {
                         if (sistolik != null && diastolik != null) {
                             entries1.add(BarEntry(i.toFloat(), sistolik))
                             entries2.add(BarEntry(i.toFloat(), diastolik))
+
+                            val kategori = when {
+                                sistolik < 90 || diastolik < 60 -> "rendah"
+                                sistolik > 120 || diastolik > 80 -> "tinggi"
+                                else -> "normal"
+                            }
+
+                            val color = if (kategori == "normal") Color.GREEN else Color.RED
+                            colors1.add(color)
+                            colors2.add(color)
                             tanggalList.add(bulan)
                         }
                     } else {
                         val nilai = nilaiString.toFloatOrNull()
                         if (nilai != null) {
                             entries1.add(BarEntry(i.toFloat(), nilai))
+                            val kategori = getKategoriNilai(parameter, nilai)
+                            val color = if (kategori == "normal") Color.GREEN else Color.RED
+                            colors1.add(color)
                             tanggalList.add(bulan)
                         }
                     }
@@ -226,122 +239,69 @@ class ActivityParameterKesehatan : AppCompatActivity() {
 
                 runOnUiThread {
                     val data: BarData
-                    val groupSpace = 0.4f // Lebih lebar antar grup
-                    val barSpace = 0.05f
-                    val barWidth: Float
-                    val groupCount = entries1.size
-
                     chart.clear()
                     chart.fitScreen()
 
-                    chart.description.isEnabled = false
-                    chart.setPinchZoom(true) // Aktifkan pinch untuk zoom manual
-                    chart.setScaleEnabled(true)
-                    chart.setDrawBarShadow(false)
-                    chart.setDrawGridBackground(false)
-                    chart.setDrawValueAboveBar(true)
-                    chart.setFitBars(true)
-                    chart.isDoubleTapToZoomEnabled = true
-
-                    chart.axisRight.isEnabled = false
-
-                    chart.axisLeft.apply {
-                        axisMinimum = 0f
-                        setDrawZeroLine(true)
-                        granularity = 1f
-                    }
-
-                    val xAxis = chart.xAxis
-                    xAxis.position = XAxis.XAxisPosition.BOTTOM
-                    xAxis.setDrawGridLines(false)
-                    xAxis.labelRotationAngle = -45f
-                    xAxis.textSize = 10f
-                    xAxis.granularity = 1f
-                    xAxis.isGranularityEnabled = true
-                    xAxis.valueFormatter = IndexAxisValueFormatter(tanggalList)
-                    xAxis.yOffset = 5f
-
-                    chart.setExtraOffsets(10f, 10f, 10f, 25f)
-
                     if (parameter == "tekanan_darah") {
                         val dataSet1 = BarDataSet(entries1, "Sistolik").apply {
-                            color = getRandomColor()
+                            setColors(colors1)
                             valueTextSize = 12f
                             valueTextColor = Color.BLACK
                         }
 
                         val dataSet2 = BarDataSet(entries2, "Diastolik").apply {
-                            color = getRandomColor()
+                            setColors(colors2)
                             valueTextSize = 12f
                             valueTextColor = Color.BLACK
                         }
 
                         data = BarData(dataSet1, dataSet2)
+                        data.barWidth = 0.25f
 
-                        /// PERBAIKAN: Pengaturan bar width dan spacing untuk grouped bar
-                        barWidth = 0.25f // Lebih lebar untuk grouped bar
-                        data.barWidth = barWidth
-                        data.setValueFormatter(LargeValueFormatter())
-
-                        // PERBAIKAN: Set data terlebih dahulu sebelum pengaturan axis
                         chart.data = data
 
-                        // PERBAIKAN: Pengaturan axis untuk grouped bar chart
-                        val groupWidth = data.getGroupWidth(groupSpace, barSpace)
-
+                        val xAxis = chart.xAxis
+                        xAxis.position = XAxis.XAxisPosition.BOTTOM
+                        xAxis.setDrawGridLines(false)
+                        xAxis.labelRotationAngle = -45f
+                        xAxis.textSize = 10f
+                        xAxis.granularity = 1f
+                        xAxis.isGranularityEnabled = true
+                        xAxis.valueFormatter = IndexAxisValueFormatter(tanggalList)
                         xAxis.setCenterAxisLabels(true)
-                        // PERBAIKAN: Memberikan margin lebih besar di kiri
                         xAxis.axisMinimum = -0.8f
-                        xAxis.axisMaximum = (groupCount - 1).toFloat() + 0.8f
-                        xAxis.setLabelCount(groupCount, false)
+                        xAxis.axisMaximum = (entries1.size - 1) + 0.8f
 
-                        // PERBAIKAN: Group bars dimulai dari 0f untuk posisi yang tepat
-                        chart.groupBars(0f, groupSpace, barSpace)
-
-                        // Scroll ke bar terakhir
-                        if (groupCount > 0) {
-                            chart.setVisibleXRangeMaximum(6f) // jumlah yang tampil sekaligus
-                            chart.moveViewToX((groupCount - 1).toFloat())
-                        }
+                        chart.groupBars(0f, 0.4f, 0.05f)
+                        chart.setVisibleXRangeMaximum(6f)
+                        chart.moveViewToX((entries1.size - 1).toFloat())
                     } else {
                         val label = parameter.replace("_", " ").replaceFirstChar { it.uppercaseChar() }
                         val dataSet = BarDataSet(entries1, label).apply {
-                            color = getRandomColor()
+                            setColors(colors1)
                             valueTextSize = 12f
                             valueTextColor = Color.BLACK
                         }
 
                         data = BarData(dataSet)
-                        barWidth = 0.7f
-                        data.barWidth = barWidth
-                        data.setValueFormatter(LargeValueFormatter())
-
-                        xAxis.setCenterAxisLabels(false)
+                        data.barWidth = 0.7f
                         chart.data = data
 
-                        // PERBAIKAN: Pengaturan axis untuk single bar chart
-                        if (entries1.isNotEmpty()) {
-                            xAxis.axisMinimum = -0.5f
-                            xAxis.axisMaximum = (entries1.size - 1) + 0.5f
-                            xAxis.setLabelCount(entries1.size, false)
+                        val xAxis = chart.xAxis
+                        xAxis.setCenterAxisLabels(false)
+                        xAxis.valueFormatter = IndexAxisValueFormatter(tanggalList)
+                        xAxis.axisMinimum = -0.5f
+                        xAxis.axisMaximum = (entries1.size - 1) + 0.5f
+                        xAxis.setLabelCount(entries1.size, false)
 
-                            chart.setVisibleXRangeMaximum(6f)
-                            chart.moveViewToX((entries1.size - 1).toFloat())
-                        }
+                        chart.setVisibleXRangeMaximum(6f)
+                        chart.moveViewToX((entries1.size - 1).toFloat())
                     }
 
                     chart.animateY(1000)
                     chart.invalidate()
                 }
-
             }
         })
-
     }
-
-    private fun getRandomColor(): Int {
-        val rnd = java.util.Random()
-        return Color.rgb(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
-    }
-
 }

@@ -36,6 +36,7 @@ import org.json.JSONObject
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener {
 
     lateinit var b: ActivityMainBinding
+
     lateinit var sharedPreferences: SharedPreferences
 
     lateinit var fberandaKader : KaderActivity
