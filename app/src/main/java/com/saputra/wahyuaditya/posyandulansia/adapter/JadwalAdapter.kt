@@ -7,7 +7,6 @@ import com.saputra.wahyuaditya.posyandulansia.databinding.ItemJadwalBinding
 import com.saputra.wahyuaditya.posyandulansia.model.Jadwal
 import java.text.SimpleDateFormat
 import java.util.Locale
-import java.util.TimeZone
 
 class JadwalAdapter(
     private val list: List<Jadwal>,
@@ -16,17 +15,16 @@ class JadwalAdapter(
 
     inner class ViewHolder(val b: ItemJadwalBinding) : RecyclerView.ViewHolder(b.root) {
         fun bind(item: Jadwal) {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault())
-            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
-
-            val outputFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale("id", "ID"))
+            // Format input: "2025-07-08"
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale("id", "ID"))
             val formattedDate = try {
-                val date = inputFormat.parse( item.created_at)
+                val date = inputFormat.parse(item.tanggal)
                 outputFormat.format(date!!)
             } catch (e: Exception) {
                 "-"
             }
-            b.tvTanggal.text = formattedDate
+            b.tvTanggal.text = formattedDate.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale("id", "ID")) else it.toString() }
 
             b.tvWaktu.text = "Pukul ${item.waktu}"
             b.tvLokasi.text = item.lokasi

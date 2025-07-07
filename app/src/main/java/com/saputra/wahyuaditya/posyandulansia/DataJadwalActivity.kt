@@ -1,7 +1,9 @@
 package com.saputra.wahyuaditya.posyandulansia
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -32,6 +34,7 @@ class DataJadwalActivity : AppCompatActivity() {
     private var currentPage = 1
     private var isLoading = false
     private var isLastPage = false
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +42,11 @@ class DataJadwalActivity : AppCompatActivity() {
         setContentView(b.root)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        sharedPreferences = this.getSharedPreferences("UserSession", Context.MODE_PRIVATE)!!
+
+        val namaDesa = sharedPreferences.getString("namaDesa", "") ?: ""
+        val formattedNamaDesa = namaDesa.lowercase().split(" ").joinToString(" ") { it.capitalize() }
+        b.tvHeader.text = "Data Jadwal $formattedNamaDesa"
 
         // Menambahkan listener untuk membuka DatePickerDialog
         b.tvTanggal.setOnClickListener {
@@ -88,6 +96,8 @@ class DataJadwalActivity : AppCompatActivity() {
             val intent = Intent(this, RiwayatLansiaActivity::class.java).apply {
                 putExtra("jadwal_id", jadwal.id)
             }
+
+            Log.d("Jadwal", "Jadwal Id ${jadwal.id}")
             startActivity(intent)
         }
 
@@ -138,8 +148,9 @@ class DataJadwalActivity : AppCompatActivity() {
         b.swipeRefreshLayout.isRefreshing = true
 
         Log.d("Jadwal", "Fetching page $currentPage with filter tanggal='$tanggal', lokasi='$lokasi'")
+        val desaId = sharedPreferences.getString("idDesaUser", "") ?: ""
 
-        ApiClient.instance.getJadwal(currentPage, tanggal, lokasi)
+        ApiClient.instance.getJadwal(currentPage, tanggal, lokasi, desaId)
             .enqueue(object : Callback<JadwalResponse> {
                 override fun onResponse(call: Call<JadwalResponse>, response: Response<JadwalResponse>) {
                     isLoading = false

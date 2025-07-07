@@ -51,7 +51,12 @@ class ActivityParameterKesehatan : AppCompatActivity() {
         chart = b.barChart
         setupChart()
 
-        val userId = sharedPreferences.getString("idUser", "0")?.toInt() ?: 0
+        val userId = if (intent.hasExtra("user_id")) {
+            intent.getIntExtra("user_id", 0)
+        } else {
+            sharedPreferences.getString("idUser", "0")?.toInt() ?: 0
+        }
+
         val parameter = intent.getStringExtra("parameter") ?: "tekanan_darah"
 
         val labelParameter = when (parameter) {

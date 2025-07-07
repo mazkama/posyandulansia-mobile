@@ -1,9 +1,13 @@
 package com.saputra.wahyuaditya.posyandulansia
 
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +29,7 @@ class DataLansiaActivity : AppCompatActivity() {
     private var currentPage = 1
     private var isLoading = false
     private var isLastPage = false
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +37,12 @@ class DataLansiaActivity : AppCompatActivity() {
         setContentView(b.root)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) // Paksa tema terang
+
+        sharedPreferences = this.getSharedPreferences("UserSession", Context.MODE_PRIVATE)!!
+
+        val namaDesa = sharedPreferences.getString("namaDesa", "") ?: ""
+        val formattedNamaDesa = namaDesa.lowercase().split(" ").joinToString(" ") { it.capitalize() }
+        b.tvHeader.text = "Data Lansia $formattedNamaDesa"
 
         setupRecyclerView()
         setupListeners()
@@ -42,9 +53,34 @@ class DataLansiaActivity : AppCompatActivity() {
         }
     }
 
+    private fun showParameterDialog(lansia: Lansia) {
+        val items = arrayOf(
+            "Tekanan Darah",
+            "Gula Darah",
+            "Kolesterol",
+            "Asam Urat"
+        )
+        val paramKeys = arrayOf(
+            "tekanan_darah",
+            "gula_darah",
+            "kolesterol",
+            "asam_urat"
+        )
+        AlertDialog.Builder(this)
+            .setTitle("Lihat Riwayat Kesehatan")
+            .setItems(items) { _, which ->
+                val intent = Intent(this, ActivityParameterKesehatan::class.java)
+                intent.putExtra("user_id", lansia.user_id) // Pastikan Lansia punya field id
+                intent.putExtra("parameter", paramKeys[which])
+                startActivity(intent)
+            }
+            .setNegativeButton("Batal", null)
+            .show()
+    }
+
     private fun setupRecyclerView() {
         lansiaAdapter = LansiaAdapter(lansiaList) { lansia ->
-            // Aksi saat item diklik
+            showParameterDialog(lansia)
         }
         with(b.rvLansia) {
             layoutManager = LinearLayoutManager(this@DataLansiaActivity)
@@ -80,7 +116,9 @@ class DataLansiaActivity : AppCompatActivity() {
         isLoading = true
         b.swipeRefreshLayout.isRefreshing = true
 
-        ApiClient.instance.getLansias(keyword, currentPage).enqueue(object : Callback<LansiaResponse> {
+        val desaId = sharedPreferences.getString("idDesaUser", "") ?: ""
+
+        ApiClient.instance.getLansias(keyword, currentPage, desaId).enqueue(object : Callback<LansiaResponse> {
             override fun onResponse(call: Call<LansiaResponse>, response: Response<LansiaResponse>) {
                 isLoading = false
                 b.swipeRefreshLayout.isRefreshing = false

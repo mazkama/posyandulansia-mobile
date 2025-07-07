@@ -1,5 +1,8 @@
 package com.saputra.wahyuaditya.posyandulansia.fragment
 
+import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +29,7 @@ class NotifikasiActivity : Fragment() {
     private var currentPage = 1
     private var isLoading = false
     private var isLastPage = false
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,7 +81,11 @@ class NotifikasiActivity : Fragment() {
         isLoading = true
         b.swipeRefreshLayout.isRefreshing = true
 
-        ApiClient.instance.getNotifikasi(currentPage).enqueue(object :
+        sharedPreferences = activity?.getSharedPreferences("UserSession", Context.MODE_PRIVATE)!!
+
+        val desaId = sharedPreferences.getString("idDesaUser", "") ?: ""
+
+        ApiClient.instance.getNotifikasi(currentPage, desaId).enqueue(object :
             Callback<NotifikasiResponse> {
             override fun onResponse(call: Call<NotifikasiResponse>, response: Response<NotifikasiResponse>) {
                 isLoading = false

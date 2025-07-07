@@ -77,9 +77,12 @@ class KaderActivity : Fragment(){
         dialog.setCancelable(false) // Tidak bisa ditutup manual
 
         val namaUser = sharedPreferences.getString("namaUser", "") ?: ""
+        val namaDesa = sharedPreferences.getString("namaDesa", "") ?: ""
+        val formattedNamaDesa = namaDesa.lowercase().split(" ").joinToString(" ") { it.capitalize() }
         // Cek apakah nilai namaUser yang didapat sesuai
         Log.d("SharedPreferences", "Nama User: $namaUser")
 
+        b.txtRole.text = "Hi, Kader ${formattedNamaDesa}"
         b.txtNamaKader.text = namaUser
 
         b.btnPeriksa.setOnClickListener {
@@ -128,8 +131,10 @@ class KaderActivity : Fragment(){
         // Tampilkan loading dialog sebelum proses dimulai
         dialog.show()
 
+        val idDesaUser = sharedPreferences.getString("idDesaUser", "") ?: ""
+
         val request = Request.Builder()
-            .url("https://posyandulansia.supala.biz.id/api/cekJadwal")
+            .url("https://posyandulansia.supala.biz.id/api/cekJadwal?desa_id=$idDesaUser")
             .get()
             .build()
 
@@ -143,6 +148,9 @@ class KaderActivity : Fragment(){
 
             override fun onResponse(call: Call, response: Response) {
                 val responseBody = response.body?.string()
+
+                // Tambahkan log di sini
+                Log.d("CekJadwalResponse", "HTTP ${response.code}: $responseBody")
 
                 dialog.dismiss() // Tutup loading jika gagal
 

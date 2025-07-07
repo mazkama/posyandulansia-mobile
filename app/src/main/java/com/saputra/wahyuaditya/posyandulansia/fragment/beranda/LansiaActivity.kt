@@ -71,9 +71,12 @@ class LansiaActivity : Fragment(){
         dialog.setCancelable(false) // Tidak bisa ditutup manual
 
         val namaUser = sharedPreferences.getString("namaUser", "") ?: ""
+        val namaDesa = sharedPreferences.getString("namaDesa", "") ?: ""
+        val formattedNamaDesa = namaDesa.lowercase().split(" ").joinToString(" ") { it.capitalize() }
         // Cek apakah nilai namaUser yang didapat sesuai
         Log.d("SharedPreferences", "Nama User: $namaUser")
 
+        b.txtRole.text = "Hi, Lansia ${formattedNamaDesa}"
         b.txtNamaLansia.text = namaUser
 
         b.btnTensi.setOnClickListener {

@@ -78,11 +78,13 @@ class LoginActivity : AppCompatActivity() {
     private fun handleLoginSuccess(responseBody: String) {
         val jsonResponse = JSONObject(responseBody)
         val accessToken = jsonResponse.getString("access_token")
+        val namaDesa = jsonResponse.getString("desa")
         val user = jsonResponse.getJSONObject("user")
         val role = user.getString("role")
 
         sharedPreferences.edit().apply {
             putString("access_token", accessToken)
+            putString("namaDesa", namaDesa)
             putString("idUser", user.getString("id"))
             putString("username", user.getString("username"))
             putString("role", user.getString("role"))
@@ -97,6 +99,7 @@ class LoginActivity : AppCompatActivity() {
             putInt("umurUser", dataUser.getInt("umur"))
             putString("alamatUser", dataUser.getString("alamat"))
             putString("noHpUser", dataUser.getString("no_hp"))
+            putString("idDesaUser", dataUser.getString("desa_id"))
             apply()
         }
 

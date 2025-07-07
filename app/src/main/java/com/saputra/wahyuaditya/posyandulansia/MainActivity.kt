@@ -73,15 +73,22 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         b.frameLayout.setBackgroundColor(Color.argb(255,255,255,255))
         b.frameLayout.visibility = View.VISIBLE
 
-        FirebaseMessaging.getInstance().subscribeToTopic("PosyanduLansia")
-            .addOnCompleteListener { task ->
-                var msg = "Subscribed"
-                if (!task.isSuccessful) {
-                    msg = "Subscription failed"
+        // Subscribe ke topik desa user jika ada idDesaUser
+        val idDesaUser = sharedPreferences.getString("idDesaUser", null)
+        if (!idDesaUser.isNullOrEmpty()) {
+            val topicDesa = "${idDesaUser}"
+            Log.d("FCM", "Akan subscribe ke topik: $topicDesa") // Log sebelum subscribe
+            FirebaseMessaging.getInstance().subscribeToTopic(topicDesa)
+                .addOnCompleteListener { task ->
+                    var msg = "Subscribed to $topicDesa"
+                    if (!task.isSuccessful) {
+                        msg = "Subscription to $topicDesa failed"
+                    }
+                    Log.d("FCM", msg) // Log hasil subscribe
                 }
-                Log.d("FCM", msg)
-//                Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
-            }
+        } else {
+            Log.d("FCM", "idDesaUser null atau kosong, tidak subscribe ke topik desa")
+        }
 
     }
 

@@ -3,6 +3,8 @@ package com.saputra.wahyuaditya.posyandulansia.model
 data class LansiaResponse(
     val status: String,
     val message: String,
+    val total_lansia: Int? = 0,
+    val total_lansia_cek_kesehatan: Int? = 0,
     val data: LansiaData
 )
 

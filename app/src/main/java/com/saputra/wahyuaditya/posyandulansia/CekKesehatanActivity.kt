@@ -32,8 +32,8 @@ class CekKesehatanActivity : AppCompatActivity() {
         // Paksa tema terang
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        val idJadwal = intent.getStringExtra("idJadwal").toString()
-        val lansiaId = intent.getStringExtra("lansiaId").toString()
+        val idJadwal = intent.getIntExtra("idJadwal", -1).toString()
+        val lansiaId = intent.getIntExtra("lansiaId", -1).toString()
         val nama = intent.getStringExtra("nama").toString()
         val nik = intent.getStringExtra("nik").toString()
 
